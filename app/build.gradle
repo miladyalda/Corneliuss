@@ -1,5 +1,6 @@
 apply plugin: 'com.android.application'
 
+
 android {
     compileSdkVersion 23
     buildToolsVersion "23.0.0"
@@ -7,7 +8,7 @@ android {
     defaultConfig {
         applicationId "robott.app.com.robott"
         minSdkVersion 14
-        targetSdkVersion 23
+        targetSdkVersion 20
         versionCode 1
         versionName "1.0"
     }
@@ -17,10 +18,27 @@ android {
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
         }
     }
+
+    dependencies {
+        compile fileTree(include: ['*.jar'], dir: 'libs')
+        testCompile 'junit:junit:4.12'
+        compile 'com.android.support:appcompat-v7:23.0.1'
+        compile files('C:/Users/my/AndroidStudioProjects/Robott/lib/joystickview.jar')
+        compile files('C:/Users/my/AndroidStudioProjects/Robott/lib/org.apache.httpcomponents.httpcore_4.4.4.jar')
+        compile files('C:/Users/my/AndroidStudioProjects/Robott/lib/org.apache.httpcomponents.httpclient_4.5.2.jar')
+
+    }
+
+
+    packagingOptions {
+        exclude 'META-INF/DEPENDENCIES'
+        exclude 'META-INF/NOTICE'
+        exclude 'META-INF/LICENSE'
+        exclude 'META-INF/LICENSE.txt'
+        exclude 'META-INF/NOTICE.txt'
+    }
+
+
 }
 
-dependencies {
-    compile fileTree(dir: 'libs', include: ['*.jar'])
-    testCompile 'junit:junit:4.12'
-    compile 'com.android.support:appcompat-v7:23.0.1'
-}
+

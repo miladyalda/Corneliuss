@@ -15,14 +15,14 @@ import java.net.Socket;
  */
 public class SendMessage extends AsyncTask<String, Void, Void> {
     private Exception exception;
-    Socket socket;
+
     @Override
     protected Void doInBackground(String... params) {
         try {
             try {
 
 
-                 socket = new Socket("192.168.42.1",8888);
+                Socket socket = new Socket("192.168.42.1",8888);
                 PrintWriter outToServer = new PrintWriter(
                         new OutputStreamWriter(
                                 socket.getOutputStream()));
@@ -41,14 +41,4 @@ public class SendMessage extends AsyncTask<String, Void, Void> {
         return null;
     }
 
-    public void close(){
-
-        try {
-            socket.close();
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-
-
-    }
 }

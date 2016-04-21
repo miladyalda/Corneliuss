@@ -49,6 +49,9 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 Log.d("BLE", "ble klicked");
+
+                //Intent intent = new Intent(MainActivity.this, JoystickViewDemoActivity.class);
+                //MainActivity.this.startActivity(intent);
             }
         });
 
