@@ -65,8 +65,72 @@
         android:layout_height="100dp"
         android:backgroundTint="@color/colorPrimaryDark"
         android:background="@drawable/joystickbig"
-        android:layout_centerVertical="true"
-        android:layout_centerHorizontal="true">
+        android:layout_alignParentBottom="true"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true">
     </RelativeLayout>
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textAppearance="?android:attr/textAppearanceMedium"
+        android:text="X"
+        android:id="@+id/textViewPan1"
+        android:layout_alignTop="@+id/linearLayout"
+        android:layout_alignRight="@+id/layout_joystick_pantilt"
+        android:layout_alignEnd="@+id/layout_joystick_pantilt"
+        android:layout_marginRight="28dp"
+        android:layout_marginEnd="28dp" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textAppearance="?android:attr/textAppearanceMedium"
+        android:text="Y"
+        android:id="@+id/textViewPan2"
+        android:layout_below="@+id/textViewPan1"
+        android:layout_alignLeft="@+id/textViewPan1"
+        android:layout_alignStart="@+id/textViewPan1" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textAppearance="?android:attr/textAppearanceMedium"
+        android:text="Angel"
+        android:id="@+id/textViewPan3"
+        android:layout_below="@+id/textViewPan2"
+        android:layout_alignRight="@+id/textViewPan2"
+        android:layout_alignEnd="@+id/textViewPan2" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textAppearance="?android:attr/textAppearanceMedium"
+        android:text="Distance"
+        android:id="@+id/textViewPan4"
+        android:layout_below="@+id/textViewPan3"
+        android:layout_alignRight="@+id/textViewPan3"
+        android:layout_alignEnd="@+id/textViewPan3" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textAppearance="?android:attr/textAppearanceMedium"
+        android:text="Direction"
+        android:id="@+id/textViewPan5"
+        android:layout_below="@+id/textViewPan4"
+        android:layout_alignRight="@+id/textViewPan4"
+        android:layout_alignEnd="@+id/textViewPan4" />
+
+    <VideoView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/videoView"
+        android:layout_below="@+id/textViewPan5"
+        android:layout_toRightOf="@+id/linearLayout"
+        android:layout_toEndOf="@+id/linearLayout"
+        android:layout_marginLeft="58dp"
+        android:layout_marginStart="58dp" />
+
 
 </RelativeLayout>
