@@ -2,58 +2,25 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent" >
-    <LinearLayout
+
+    <SurfaceView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_alignParentLeft="true"
+        android:id="@+id/surfaceView"
         android:layout_alignParentTop="true"
-        android:layout_margin="30dp"
-        android:orientation="vertical"
-        android:id="@+id/linearLayout">
-        <TextView
-            android:id="@+id/textView1"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="X"
-            android:textColor="#444444"
-            android:textSize="20dp" />
-        <TextView
-            android:id="@+id/textView2"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="Y"
-            android:textColor="#444444"
-            android:textSize="20dp" />
-        <TextView
-            android:id="@+id/textView3"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="Angle"
-            android:textColor="#444444"
-            android:textSize="20dp" />
-        <TextView
-            android:id="@+id/textView4"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="Distance"
-            android:textColor="#444444"
-            android:textSize="20dp" />
-        <TextView
-            android:id="@+id/textView5"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="Direction"
-            android:textColor="#444444"
-            android:textSize="20dp" />
-
-
-    </LinearLayout>
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true"
+        android:layout_alignParentBottom="true"
+        android:layout_alignParentRight="true"
+        android:layout_alignParentEnd="true"
+        />
 
     <RelativeLayout
     android:id="@+id/layout_joystick_pantilt"
     android:layout_width="100dp"
     android:layout_height="100dp"
-    android:background="@drawable/joystickbig"
+        android:backgroundTint="@color/colorPrimaryDark"
+        android:background="@drawable/joystickbig"
         android:layout_alignParentBottom="true"
         android:layout_alignParentRight="true"
         android:layout_alignParentEnd="true">
@@ -73,64 +40,24 @@
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:textAppearance="?android:attr/textAppearanceMedium"
-        android:text="X"
-        android:id="@+id/textViewPan1"
-        android:layout_alignTop="@+id/linearLayout"
-        android:layout_alignRight="@+id/layout_joystick_pantilt"
-        android:layout_alignEnd="@+id/layout_joystick_pantilt"
-        android:layout_marginRight="28dp"
-        android:layout_marginEnd="28dp" />
+        android:textAppearance="?android:attr/textAppearanceSmall"
+        android:text="Small Text"
+        android:textColor="#ffffff"
+        android:id="@+id/batterStatus"
+        android:layout_alignParentTop="true"
+        android:layout_alignParentRight="true"
+        android:layout_alignParentEnd="true"
+        android:layout_marginTop="50dp" />
 
-    <TextView
-        android:layout_width="wrap_content"
+    <SeekBar
+        android:layout_width="200dp"
         android:layout_height="wrap_content"
-        android:textAppearance="?android:attr/textAppearanceMedium"
-        android:text="Y"
-        android:id="@+id/textViewPan2"
-        android:layout_below="@+id/textViewPan1"
-        android:layout_alignLeft="@+id/textViewPan1"
-        android:layout_alignStart="@+id/textViewPan1" />
-
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:textAppearance="?android:attr/textAppearanceMedium"
-        android:text="Angel"
-        android:id="@+id/textViewPan3"
-        android:layout_below="@+id/textViewPan2"
-        android:layout_alignRight="@+id/textViewPan2"
-        android:layout_alignEnd="@+id/textViewPan2" />
-
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:textAppearance="?android:attr/textAppearanceMedium"
-        android:text="Distance"
-        android:id="@+id/textViewPan4"
-        android:layout_below="@+id/textViewPan3"
-        android:layout_alignRight="@+id/textViewPan3"
-        android:layout_alignEnd="@+id/textViewPan3" />
-
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:textAppearance="?android:attr/textAppearanceMedium"
-        android:text="Direction"
-        android:id="@+id/textViewPan5"
-        android:layout_below="@+id/textViewPan4"
-        android:layout_alignRight="@+id/textViewPan4"
-        android:layout_alignEnd="@+id/textViewPan4" />
-
-    <VideoView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:id="@+id/videoView"
-        android:layout_below="@+id/textViewPan5"
-        android:layout_toRightOf="@+id/linearLayout"
-        android:layout_toEndOf="@+id/linearLayout"
-        android:layout_marginLeft="58dp"
-        android:layout_marginStart="58dp" />
+        android:id="@+id/seekBarLight"
+        android:rotation="-90"
+        android:layout_marginTop="41dp"
+        android:layout_below="@+id/batterStatus"
+        android:layout_alignRight="@+id/layout_joystick_move"
+        android:layout_alignEnd="@+id/layout_joystick_move" />
 
 
 </RelativeLayout>

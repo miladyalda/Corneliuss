@@ -33,7 +33,7 @@ public class JoystickClassPanTilt {
     private ViewGroup.LayoutParams params;
     private int stick_width, stick_height;
 
-    private int position_x = 0, position_y = 0, min_distance = 0, max_distance = 127, neg_distance = -127;
+    private int position_x = 0, position_y = 0, min_distance = 0, max_distance = 127, neg_distance = 10, stepmotor_direction = -1, max_speed = 1000, min_speed = 10;
     private float distance = 0, angle = 0;
 
     float rightEngineSpeed;
@@ -96,7 +96,7 @@ public class JoystickClassPanTilt {
         } else if (arg1.getAction() == MotionEvent.ACTION_UP) {
             mLayout.removeView(draw);
             touch_state = false;
-            new SendMessage().execute(String.valueOf(0)+","+String.valueOf(0));
+           // new SendMessage().execute(String.valueOf(0)+","+String.valueOf(0));
         }
     }
 
@@ -129,15 +129,24 @@ public class JoystickClassPanTilt {
     }
 
     public float getDistance() {
-        if (distance > max_distance){
-            distance = max_distance;
-        }
-        if (distance <= max_distance && touch_state) {
-            calcspeed();
 
-            return distance;
+        if (distance*10 > max_speed && touch_state){
+            return max_speed;
         }
-        return 0;
+        //if (distance <= max_distance && touch_state) {
+          //  calcspeed();
+        if (distance*10 < min_speed && touch_state){
+            return  min_speed;
+        }
+
+         //   Log.d("distance", "" + distance*10);
+
+
+
+
+       // }
+        //return distance != 0 ? 1/(distance*10) : 0;
+        return distance;
     }
 
     public void setMinimumDistance(int minDistance) {
@@ -172,16 +181,21 @@ public class JoystickClassPanTilt {
             }
             return 0;
         }
-    */
+
+        */
+
+
     public int get4Direction() {
         if (distance > min_distance && touch_state) {
-            if (angle >= 260 && angle < 280) {
-                return STICK_UP;
-            } else if (angle >= 350 || angle < 10) {
+            //if (angle >= 260 && angle < 280) {
+              //  return STICK_UP;
+          //  }
+            if (angle >= 280 || angle < 80) {
                 return STICK_RIGHT;
-            } else if (angle >= 80 && angle < 100) {
-                return STICK_DOWN;
-            } else if (angle >= 170 && angle < 190) {
+            } //else if (angle >= 270 && angle < 90) {
+               // return STICK_DOWN;
+           // }
+            else if (angle >= 100 && angle < 260) {
                 return STICK_LEFT;
             }
         } else if (distance <= min_distance && touch_state) {
@@ -189,6 +203,8 @@ public class JoystickClassPanTilt {
         }
         return 0;
     }
+
+
 
     public void setOffset(int offset) {
         OFFSET = offset;
@@ -322,11 +338,26 @@ public class JoystickClassPanTilt {
 
 
 
-        Log.d("x,y", "" + leftEngineSpeed + " " + rightEngineSpeed);
+        //Log.d("x,y", "" + leftEngineSpeed + " " + rightEngineSpeed);
 
 
     }
+    public int getStepmotor_direction(){
 
+        if (get4Direction()==STICK_LEFT) {
+            stepmotor_direction = 0;
+            return stepmotor_direction;
+
+
+        }else if (get4Direction()==STICK_RIGHT) {
+            stepmotor_direction = 1;
+            return stepmotor_direction;
+
+        }
+
+    return 2;
+    }
+/*
     public float getspeedX(){
 
 
@@ -382,5 +413,5 @@ public class JoystickClassPanTilt {
         }
 
         return rightEngineSpeed;
-    }
+    }*/
 }

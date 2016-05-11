@@ -18,7 +18,6 @@ import android.widget.Button;
 public class MainActivity extends AppCompatActivity {
 
     Button wifi;
-    Button ble;
     Button info;
 
 
@@ -28,7 +27,6 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
 
             wifi = (Button)findViewById(R.id.Wifi);
-            ble = (Button)findViewById(R.id.BLE);
             info = (Button)findViewById(R.id.INFO);
 
 
@@ -44,16 +42,6 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
-
-        ble.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Log.d("BLE", "ble klicked");
-
-                //Intent intent = new Intent(MainActivity.this, JoystickViewDemoActivity.class);
-                //MainActivity.this.startActivity(intent);
-            }
-        });
 
 
         info.setOnClickListener(new View.OnClickListener() {

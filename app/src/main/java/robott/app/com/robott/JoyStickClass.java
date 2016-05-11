@@ -97,7 +97,8 @@ public class JoyStickClass {
         } else if (arg1.getAction() == MotionEvent.ACTION_UP) {
             mLayout.removeView(draw);
             touch_state = false;
-            new SendMessage().execute(String.valueOf(0)+","+String.valueOf(0));
+
+            //new SendMessage().execute(String.valueOf(0)+","+String.valueOf(0));
         }
     }
 

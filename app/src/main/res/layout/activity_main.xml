@@ -12,32 +12,22 @@
 
 
     <Button
-        android:layout_width="wrap_content"
+        android:layout_width="200dp"
         android:layout_height="wrap_content"
         android:text="Wifi"
         android:id="@+id/Wifi"
-        android:layout_marginTop="57dp"
+        android:layout_marginTop="148dp"
         android:layout_alignParentTop="true"
         android:layout_centerHorizontal="true" />
 
     <Button
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="BLE"
-        android:id="@+id/BLE"
-        android:layout_alignParentTop="true"
-        android:layout_alignLeft="@+id/Wifi"
-        android:layout_alignStart="@+id/Wifi"
-        android:layout_marginTop="142dp" />
-
-    <Button
-        android:layout_width="wrap_content"
+        android:layout_width="200dp"
         android:layout_height="wrap_content"
         android:text="INFO"
         android:id="@+id/INFO"
-        android:layout_below="@+id/Wifi"
+        android:layout_centerVertical="true"
         android:layout_alignLeft="@+id/Wifi"
-        android:layout_alignStart="@+id/Wifi"
-        android:layout_marginTop="136dp" />
+        android:layout_alignStart="@+id/Wifi" />
+
 
 </RelativeLayout>
