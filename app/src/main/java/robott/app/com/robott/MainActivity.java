@@ -15,6 +15,8 @@ import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 
+import robott.app.com.robott.info.InfoShow;
+
 public class MainActivity extends AppCompatActivity {
 
     Button wifi;
@@ -47,7 +49,9 @@ public class MainActivity extends AppCompatActivity {
         info.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Log.d("INFO", "info klicked");
+
+                Intent intent = new Intent(MainActivity.this, InfoShow.class);
+                MainActivity.this.startActivity(intent);
             }
         });
 

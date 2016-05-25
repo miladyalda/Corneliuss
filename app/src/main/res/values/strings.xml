@@ -9,4 +9,7 @@
     <string name="left_lab">left_lab</string>
     <string name="left_front_lab">left_front_lab</string>
     <string name="center_lab">center_lab</string>
+
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
 </resources>

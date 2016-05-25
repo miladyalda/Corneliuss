@@ -33,7 +33,7 @@ public class JoyStickClass {
     private ViewGroup mLayout;
     private LayoutParams params;
     private int stick_width, stick_height;
-
+    CamerActivity Cam = new CamerActivity();
     private int position_x = 0, position_y = 0, min_distance = 0, max_distance = 127, neg_distance = -127;
     private float distance = 0, angle = 0;
 
@@ -96,9 +96,16 @@ public class JoyStickClass {
             }
         } else if (arg1.getAction() == MotionEvent.ACTION_UP) {
             mLayout.removeView(draw);
+            leftEngineSpeed = 0;
+            rightEngineSpeed = 0;
+            new SendMessage().execute(String.valueOf(leftEngineSpeed)
+                    + "," + String.valueOf(rightEngineSpeed)
+                    + "," + String.valueOf(Cam.panTiltX)
+                    + "," + String.valueOf(Cam.panTiltY)
+                    + "," + String.valueOf(Cam.progressChange));
             touch_state = false;
 
-            //new SendMessage().execute(String.valueOf(0)+","+String.valueOf(0));
+
         }
     }
 
@@ -145,43 +152,14 @@ public class JoyStickClass {
     public void setMinimumDistance(int minDistance) {
         min_distance = minDistance;
     }
-    /*
-        public int getMinimumDistance() {
-            return min_distance;
-        }
-    /*
-        public int get8Direction() {
-            if (distance > min_distance && touch_state) {
-                if (angle >= 247.5 && angle < 292.5) {
-                    return STICK_UP;
-                } else if (angle >= 292.5 && angle < 337.5) {
-                    return STICK_UPRIGHT;
-                } else if (angle >= 337.5 || angle < 22.5) {
-                    return STICK_RIGHT;
-                } else if (angle >= 22.5 && angle < 67.5) {
-                    return STICK_DOWNRIGHT;
-                } else if (angle >= 67.5 && angle < 112.5) {
-                    return STICK_DOWN;
-                } else if (angle >= 112.5 && angle < 157.5) {
-                    return STICK_DOWNLEFT;
-                } else if (angle >= 157.5 && angle < 202.5) {
-                    return STICK_LEFT;
-                } else if (angle >= 202.5 && angle < 247.5) {
-                    return STICK_UPLEFT;
-                }
-            } else if (distance <= min_distance && touch_state) {
-                return STICK_NONE;
-            }
-            return 0;
-        }
-    */
+
     public int get4Direction() {
         if (distance > min_distance && touch_state) {
-            if (angle >= 260 && angle < 280) {
+            if (angle >= 255 && angle < 285) {
                 return STICK_UP;
             } else if (angle >= 350 || angle < 10) {
                 return STICK_RIGHT;
-            } else if (angle >= 80 && angle < 100) {
+            } else if (angle >= 75 && angle < 105) {
                 return STICK_DOWN;
             } else if (angle >= 170 && angle < 190) {
                 return STICK_LEFT;
@@ -195,66 +173,28 @@ public class JoyStickClass {
     public void setOffset(int offset) {
         OFFSET = offset;
     }
-/*
-    public int getOffset() {
-        return OFFSET;
-    }
-*/
+
     public void setStickAlpha(int alpha) {
         STICK_ALPHA = alpha;
         paint.setAlpha(alpha);
     }
-/*
-    public int getStickAlpha() {
-        return STICK_ALPHA;
-    }
-*/
+
     public void setLayoutAlpha(int alpha) {
         LAYOUT_ALPHA = alpha;
         mLayout.getBackground().setAlpha(alpha);
     }
-/*
-    public int getLayoutAlpha() {
-        return LAYOUT_ALPHA;
-    }
-*/
+
     public void setStickSize(int width, int height) {
         stick = Bitmap.createScaledBitmap(stick, width, height, false);
         stick_width = stick.getWidth();
         stick_height = stick.getHeight();
     }
-/*
-    public void setStickWidth(int width) {
-        stick = Bitmap.createScaledBitmap(stick, width, stick_height, false);
-        stick_width = stick.getWidth();
-    }
 
-    public void setStickHeight(int height) {
-        stick = Bitmap.createScaledBitmap(stick, stick_width, height, false);
-        stick_height = stick.getHeight();
-    }
-
-    public int getStickWidth() {
-        return stick_width;
-    }
-
-    public int getStickHeight() {
-        return stick_height;
-    }
-*/
     public void setLayoutSize(int width, int height) {
         params.width = width;
         params.height = height;
     }
-/*
-    public int getLayoutWidth() {
-        return params.width;
-    }
 
-    public int getLayoutHeight() {
-        return params.height;
-    }
-*/
     private double cal_angle(float x, float y) {
         if (x >= 0 && y >= 0)
             return Math.toDegrees(Math.atan(y / x));
@@ -291,28 +231,8 @@ public class JoyStickClass {
             y = pos_y - (stick_height / 2);
         }
     }
-/*
-    public void robotXY(float dist){
 
 
-
-            if (get4Direction()==0) {
-                Log.d("x,y"," "+dist+" "+dist);
-
-            } else if (get4Direction()==3) {
-                Log.d("x,y",""+dist+" "+(127-dist));
-
-            } else if (get4Direction()==7) {
-                Log.d("x,y",""+(127-dist)+" "+dist);
-
-            } else if (get4Direction()==5) {
-                Log.d("x,y",""+dist+" "+dist);
-
-            }
-
-
-    }
-    */
     public void calcspeed(){
 
         float xMultiplier = -1.0f;

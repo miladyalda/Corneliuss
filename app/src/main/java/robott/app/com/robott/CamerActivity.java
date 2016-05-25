@@ -7,6 +7,7 @@ import android.media.MediaPlayer;
 import android.net.Uri;
 import android.net.wifi.WifiInfo;
 import android.net.wifi.WifiManager;
+import android.os.AsyncTask;
 import android.provider.Settings;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -18,7 +19,12 @@ import android.view.View;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
 
+import java.io.ByteArrayOutputStream;
 import java.io.IOException;
+import java.io.InputStream;
+import java.io.OutputStreamWriter;
+import java.io.PrintWriter;
+import java.net.Socket;
 
 import android.media.MediaPlayer.OnErrorListener;
 import android.widget.SeekBar;
@@ -30,19 +36,21 @@ public class CamerActivity extends AppCompatActivity implements OnErrorListener,
     RelativeLayout layout_joystick;
 
     RelativeLayout layout_joystickPantilt;
+
     ImageView image_joystick, image_border;
     private int mCurrentBufferPercentage;
     float motorX = 0;
     float motorY = 0;
-
+    float battery;
     float panTiltX = 0;
-    float panTiltY = 2;
+    float panTiltY = 7;
     private SurfaceHolder surfaceHolder;
 
     int progressChange = 0;
 
     JoyStickClass js;
     JoystickClassPanTilt jsPanTilt;
+
 
     private MediaPlayer mp = null;
     SurfaceView mSurfaceView=null;
@@ -58,21 +66,24 @@ public class CamerActivity extends AppCompatActivity implements OnErrorListener,
 
         startActivity(new Intent(Settings.ACTION_WIFI_SETTINGS));
 
+       // new ReceiveMessage().execute("go");
+
+
 
         mp = new MediaPlayer();
 
         batteriStatus = (TextView)findViewById(R.id.batterStatus);
 
-        //mSurfaceView = (SurfaceView) findViewById(R.id.surfaceView);
+        mSurfaceView = (SurfaceView) findViewById(R.id.surfaceView);
 
-        //surfaceHolder = mSurfaceView.getHolder();
-        //surfaceHolder.addCallback(this);
+        surfaceHolder = mSurfaceView.getHolder();
+        surfaceHolder.addCallback(this);
 
         layout_joystick = (RelativeLayout)findViewById(R.id.layout_joystick_move);
 
         layout_joystickPantilt = (RelativeLayout)findViewById(R.id.layout_joystick_pantilt);
 
-        batteriStatus = (TextView)findViewById(R.id.batterStatus);
+       // batteriStatus = (TextView)findViewById(R.id.batterStatus);
 
         lightControll = (SeekBar)findViewById(R.id.seekBarLight);
 
@@ -83,20 +94,24 @@ public class CamerActivity extends AppCompatActivity implements OnErrorListener,
 
                 progressChange = progress;
 
-                batteriStatus.setText(progress+"%");
 
-                //0-100
-                //Log.d("eeee","" + progressChange);
-               // new SendMessage().execute(String.valueOf(motorX) + "," + String.valueOf(motorY) +
-                 //       "," + String.valueOf(jsPanTilt.getDistance()) + "," + String.valueOf(jsPanTilt.getStepmotor_direction()) +
-                   //     "," + String.valueOf(progressChange));
 
+                batteriStatus = (TextView)findViewById(R.id.batterStatus);
+                battery = (int)SendMessage.getBatteryPercentage();
+                Log.d("cornelius","battery is now " + battery);
+                batteriStatus.setText((String.valueOf(battery + "%")));
+                if (panTiltY == 2) {
+                    panTiltX = jsPanTilt.getServoSpeed();
+                    panTiltY = jsPanTilt.getStepmotor_direction();
+                }
 
                 new SendMessage().execute(String.valueOf(motorX)
                         + "," + String.valueOf(motorY)
-                        + "," + String.valueOf(jsPanTilt.getDistance())
-                        + "," + String.valueOf(jsPanTilt.getStepmotor_direction())
+                        + "," + String.valueOf(panTiltX)
+                        + "," + String.valueOf(panTiltY)
                         + "," + String.valueOf(progressChange));
+
+                //new ReceiveMessage().execute("go");
 
                 Log.d("distans", String.valueOf(motorX) + "," + String.valueOf(motorY) +
                         "," + String.valueOf(panTiltX) + "," + String.valueOf(panTiltY) +
@@ -115,9 +130,12 @@ public class CamerActivity extends AppCompatActivity implements OnErrorListener,
 
             }
         });
+        battery = (int)SendMessage.getBatteryPercentage();
+        batteriStatus.setText((String.valueOf(battery) + "%"));
 
-        batteriStatus.setText("Batteri");
+        js = new JoyStickClass(getApplicationContext()
 
+                , layout_joystick, R.drawable.joysticksmall);
 
         js = new JoyStickClass(getApplicationContext()
 
@@ -163,20 +181,27 @@ public class CamerActivity extends AppCompatActivity implements OnErrorListener,
 
                 jsPanTilt.drawStick(event);
                 jsPanTilt.getDistance();
+                batteriStatus = (TextView)findViewById(R.id.batterStatus);
+                battery = (int)SendMessage.getBatteryPercentage();
+                Log.d("cornelius","battery is now " + battery);
+                batteriStatus.setText((String.valueOf(battery + "%")));
 
                 if (event.getAction() == MotionEvent.ACTION_DOWN
                         || event.getAction() == MotionEvent.ACTION_MOVE) {
 
 
-                     panTiltX = jsPanTilt.getDistance();
+                     panTiltX = jsPanTilt.getServoSpeed();
                      panTiltY = jsPanTilt.getStepmotor_direction();
-                     Log.d("distans",String.valueOf(jsPanTilt.getDistance())
-                             + "," + String.valueOf(jsPanTilt.getStepmotor_direction()));
+
+
+                  //   Log.d("distans",String.valueOf(jsPanTilt.getServoSpeed()))
+                    //         + "," + String.valueOf(jsPanTilt.getStepmotor_direction()));
+                   // new ReceiveMessage().execute("go");
 
                         new SendMessage().execute(String.valueOf(motorX)
                                 + "," + String.valueOf(motorY)
-                                + "," + String.valueOf(panTiltX)
-                                + "," + String.valueOf(panTiltY)
+                                + "," + String.valueOf(jsPanTilt.getServoSpeed())
+                                + "," + String.valueOf(jsPanTilt.getStepmotor_direction())
                                 + "," + String.valueOf(progressChange));
 
 
@@ -213,7 +238,7 @@ public class CamerActivity extends AppCompatActivity implements OnErrorListener,
 
 
                     panTiltX = 0;
-                    panTiltY = 2;
+                    panTiltY = 7;
 
 
                     new SendMessage().execute(String.valueOf(motorX)
@@ -221,6 +246,7 @@ public class CamerActivity extends AppCompatActivity implements OnErrorListener,
                             + "," + String.valueOf(panTiltX)
                             + "," + String.valueOf(panTiltY)
                             + "," + String.valueOf(progressChange));
+
 
 
                 }
@@ -241,14 +267,21 @@ public class CamerActivity extends AppCompatActivity implements OnErrorListener,
                         || arg1.getAction() == MotionEvent.ACTION_MOVE) {
 
 
-                  //  Log.d("distans",String.valueOf(jsPanTilt.getDistance())+ "," + String.valueOf(jsPanTilt.getStepmotor_direction()));
+
                     motorX = js.getspeedX();
                     motorY = js.getspeedY();
+                    if(panTiltY == 2){
+                        panTiltX = jsPanTilt.getServoSpeed();
+                        panTiltY = jsPanTilt.getStepmotor_direction();
+                    }
+
                     new SendMessage().execute(String.valueOf(motorX)
                             + "," + String.valueOf(motorY)
-                            + "," + String.valueOf(jsPanTilt.getDistance())
-                            + "," + String.valueOf(jsPanTilt.getStepmotor_direction())
+                            + "," + String.valueOf(panTiltX)
+                            + "," + String.valueOf(panTiltY)
                             + "," + String.valueOf(progressChange));
+
+                    Log.d("distans", String.valueOf(panTiltX) + "," + String.valueOf(panTiltY));
 
                     int direction = js.get4Direction();
 
@@ -284,6 +317,7 @@ public class CamerActivity extends AppCompatActivity implements OnErrorListener,
 
                     motorX = 0;
                     motorY = 0;
+
                     new SendMessage().execute(String.valueOf(motorX)
                             + "," + String.valueOf(motorY)
                             + "," + String.valueOf(panTiltX)
@@ -291,7 +325,8 @@ public class CamerActivity extends AppCompatActivity implements OnErrorListener,
                             + "," + String.valueOf(progressChange));
 
 
-                    Log.d("distans", "fuuuuuuuuuuuuucccccccccccckkkkkkkkkkkkkkkkkkkkkkkkkk");
+                    Log.d("distans", String.valueOf(panTiltX) + "," + String.valueOf(panTiltY));
+
 
                 }
 
@@ -334,20 +369,21 @@ public class CamerActivity extends AppCompatActivity implements OnErrorListener,
 
 
         //problem med rtsp med hhtp funkar utmärk
-        //rtsp://wowzaec2demo.streamlock.net/vod/mp4:BigBuckBunny_115k.mov
+        //  "rtsp://wowzaec2demo.streamlock.net/vod/mp4:BigBuckBunny_115k.mov"
         Uri video = Uri.parse("http://192.168.42.1:8080");
 
         try {
 
             mp = new MediaPlayer();
-            Log.d("surfaceCreated","cccccccccccccccccccccccccreatedddddddddddddddddddddddd");
+            Log.d("surfaceCreated", "cccccccccccccccccccccccccreatedddddddddddddddddddddddd");
             mp.setDisplay(surfaceHolder);
             mp.setOnVideoSizeChangedListener(this);
             mp.setOnErrorListener(this);
             mp.setOnBufferingUpdateListener(this);
             this.mCurrentBufferPercentage = 0;
             mp.setDataSource(String.valueOf(video));
-            mp.prepare();
+            mp.setOnPreparedListener(this);
+            mp.prepareAsync();
 
 
         } catch (IOException e) {
@@ -390,8 +426,8 @@ public class CamerActivity extends AppCompatActivity implements OnErrorListener,
 
        //new SendMessage().execute(String.valueOf(0) + "," + String.valueOf(0) +
          //    "," + String.valueOf(0) + "," + String.valueOf(2));
-       /// mp.stop();
-        //mp.release();
+        mp.stop();
+        mp.release();
 
         Log.d("OnStop", "onstop methooooood calllleeeeddd");
 
@@ -409,8 +445,8 @@ public class CamerActivity extends AppCompatActivity implements OnErrorListener,
     }
 
     @Override
-    public void onPrepared(MediaPlayer mp) {
-
+    public void onPrepared(MediaPlayer player) {
+        player.start();
     }
 
     @Override
@@ -434,11 +470,14 @@ public class CamerActivity extends AppCompatActivity implements OnErrorListener,
 
     //580=3.8volt<= max 489=3.1volt <=min batteriet dor vid 3.1 volt så skillnade blir 91
     //och do tar jag medelverde under tre minuer och kolla skillande med max verde sen tar jag skillnad med 91:$.
-    public double BatteryFunc(float v) {
+    public void BatteryFunc(int v) {
 
         double temp = 580-v;
-        return 91-temp;
+
+        batteriStatus.setText(91-temp + "%");
+
     }
+
 }
 
 

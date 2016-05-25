@@ -19,7 +19,6 @@
     android:id="@+id/layout_joystick_pantilt"
     android:layout_width="100dp"
     android:layout_height="100dp"
-        android:backgroundTint="@color/colorPrimaryDark"
         android:background="@drawable/joystickbig"
         android:layout_alignParentBottom="true"
         android:layout_alignParentRight="true"
@@ -30,7 +29,6 @@
         android:id="@+id/layout_joystick_move"
         android:layout_width="100dp"
         android:layout_height="100dp"
-        android:backgroundTint="@color/colorPrimaryDark"
         android:background="@drawable/joystickbig"
         android:layout_alignParentBottom="true"
         android:layout_alignParentLeft="true"
@@ -44,20 +42,32 @@
         android:text="Small Text"
         android:textColor="#ffffff"
         android:id="@+id/batterStatus"
-        android:layout_alignParentTop="true"
-        android:layout_alignParentRight="true"
-        android:layout_alignParentEnd="true"
-        android:layout_marginTop="50dp" />
+        android:layout_below="@+id/textView"
+        android:layout_alignRight="@+id/layout_joystick_pantilt"
+        android:layout_alignEnd="@+id/layout_joystick_pantilt" />
 
     <SeekBar
         android:layout_width="200dp"
         android:layout_height="wrap_content"
         android:id="@+id/seekBarLight"
         android:rotation="-90"
+        android:backgroundTint="#FF3B00"
         android:layout_marginTop="41dp"
         android:layout_below="@+id/batterStatus"
         android:layout_alignRight="@+id/layout_joystick_move"
         android:layout_alignEnd="@+id/layout_joystick_move" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textAppearance="?android:attr/textAppearanceSmall"
+        android:text="BAT"
+        android:textColor="#ffffff"
+        android:id="@+id/textView"
+        android:layout_alignParentTop="true"
+        android:layout_alignRight="@+id/batterStatus"
+        android:layout_alignEnd="@+id/batterStatus"
+        android:layout_marginTop="42dp" />
 
 
 </RelativeLayout>

@@ -11,6 +11,7 @@ import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.ViewGroup.LayoutParams;
+import java.lang.Math;
 
 
 public class JoystickClassPanTilt {
@@ -33,15 +34,27 @@ public class JoystickClassPanTilt {
     private ViewGroup.LayoutParams params;
     private int stick_width, stick_height;
 
-    private int position_x = 0, position_y = 0, min_distance = 0, max_distance = 127, neg_distance = 10, stepmotor_direction = -1, max_speed = 1000, min_speed = 10;
+    private int position_x = 0, position_y = 0, min_distance = 0, max_distance = 127, neg_distance = 10, stepmotor_direction = -1, max_speed = 1500, min_speed = 0;
     private float distance = 0, angle = 0;
 
     float rightEngineSpeed;
     float leftEngineSpeed;
+    float servoSpeed;
 
     private DrawCanvas draw;
     private Paint paint;
     private Bitmap stick;
+
+    private int directionZeroCounter = 0;
+    private int directionOneCounter = 0;
+
+    public int getDirectionOneCounter() {
+        return directionOneCounter;
+    }
+
+    public int getDirectionZeroCounter() {
+        return directionZeroCounter;
+    }
 
     private boolean touch_state = false;
 
@@ -96,7 +109,7 @@ public class JoystickClassPanTilt {
         } else if (arg1.getAction() == MotionEvent.ACTION_UP) {
             mLayout.removeView(draw);
             touch_state = false;
-           // new SendMessage().execute(String.valueOf(0)+","+String.valueOf(0));
+
         }
     }
 
@@ -128,74 +141,36 @@ public class JoystickClassPanTilt {
         return 0;
     }
 
-    public float getDistance() {
+    public void getDistance() {
 
-        if (distance*10 > max_speed && touch_state){
-            return max_speed;
-        }
-        //if (distance <= max_distance && touch_state) {
-          //  calcspeed();
-        if (distance*10 < min_speed && touch_state){
-            return  min_speed;
+        if (servoSpeed > max_speed && touch_state){
+            servoSpeed = max_speed;
         }
 
-         //   Log.d("distance", "" + distance*10);
+        if (servoSpeed < min_speed && touch_state){
+            servoSpeed = min_speed;
 
+        }
 
-
-
-       // }
-        //return distance != 0 ? 1/(distance*10) : 0;
-        return distance;
     }
 
     public void setMinimumDistance(int minDistance) {
         min_distance = minDistance;
     }
-    /*
-        public int getMinimumDistance() {
-            return min_distance;
-        }
-    /*
-        public int get8Direction() {
-            if (distance > min_distance && touch_state) {
-                if (angle >= 247.5 && angle < 292.5) {
-                    return STICK_UP;
-                } else if (angle >= 292.5 && angle < 337.5) {
-                    return STICK_UPRIGHT;
-                } else if (angle >= 337.5 || angle < 22.5) {
-                    return STICK_RIGHT;
-                } else if (angle >= 22.5 && angle < 67.5) {
-                    return STICK_DOWNRIGHT;
-                } else if (angle >= 67.5 && angle < 112.5) {
-                    return STICK_DOWN;
-                } else if (angle >= 112.5 && angle < 157.5) {
-                    return STICK_DOWNLEFT;
-                } else if (angle >= 157.5 && angle < 202.5) {
-                    return STICK_LEFT;
-                } else if (angle >= 202.5 && angle < 247.5) {
-                    return STICK_UPLEFT;
-                }
-            } else if (distance <= min_distance && touch_state) {
-                return STICK_NONE;
-            }
-            return 0;
-        }
-
-        */
 
 
     public int get4Direction() {
         if (distance > min_distance && touch_state) {
-            //if (angle >= 260 && angle < 280) {
-              //  return STICK_UP;
-          //  }
-            if (angle >= 280 || angle < 80) {
+            if (angle >= 200 && angle < 340) {
+                return STICK_UP;
+            }
+            else if (angle >= 290 || angle < 70) {
                 return STICK_RIGHT;
-            } //else if (angle >= 270 && angle < 90) {
-               // return STICK_DOWN;
-           // }
-            else if (angle >= 100 && angle < 260) {
+            }
+            else if (angle >= 20 && angle < 160) {
+                return STICK_DOWN;
+            }
+            else if (angle >= 110 && angle < 250) {
                 return STICK_LEFT;
             }
         } else if (distance <= min_distance && touch_state) {
@@ -209,11 +184,7 @@ public class JoystickClassPanTilt {
     public void setOffset(int offset) {
         OFFSET = offset;
     }
-    /*
-        public int getOffset() {
-            return OFFSET;
-        }
-    */
+
     public void setStickAlpha(int alpha) {
         STICK_ALPHA = alpha;
         paint.setAlpha(alpha);
@@ -227,48 +198,18 @@ public class JoystickClassPanTilt {
         LAYOUT_ALPHA = alpha;
         mLayout.getBackground().setAlpha(alpha);
     }
-    /*
-        public int getLayoutAlpha() {
-            return LAYOUT_ALPHA;
-        }
-    */
+
     public void setStickSize(int width, int height) {
         stick = Bitmap.createScaledBitmap(stick, width, height, false);
         stick_width = stick.getWidth();
         stick_height = stick.getHeight();
     }
-    /*
-        public void setStickWidth(int width) {
-            stick = Bitmap.createScaledBitmap(stick, width, stick_height, false);
-            stick_width = stick.getWidth();
-        }
 
-        public void setStickHeight(int height) {
-            stick = Bitmap.createScaledBitmap(stick, stick_width, height, false);
-            stick_height = stick.getHeight();
-        }
-
-        public int getStickWidth() {
-            return stick_width;
-        }
-
-        public int getStickHeight() {
-            return stick_height;
-        }
-    */
     public void setLayoutSize(int width, int height) {
         params.width = width;
         params.height = height;
     }
-    /*
-        public int getLayoutWidth() {
-            return params.width;
-        }
 
-        public int getLayoutHeight() {
-            return params.height;
-        }
-    */
     private double cal_angle(float x, float y) {
         if (x >= 0 && y >= 0)
             return Math.toDegrees(Math.atan(y / x));
@@ -305,28 +246,7 @@ public class JoystickClassPanTilt {
             y = pos_y - (stick_height / 2);
         }
     }
-    /*
-        public void robotXY(float dist){
 
-
-
-                if (get4Direction()==0) {
-                    Log.d("x,y"," "+dist+" "+dist);
-
-                } else if (get4Direction()==3) {
-                    Log.d("x,y",""+dist+" "+(127-dist));
-
-                } else if (get4Direction()==7) {
-                    Log.d("x,y",""+(127-dist)+" "+dist);
-
-                } else if (get4Direction()==5) {
-                    Log.d("x,y",""+dist+" "+dist);
-
-                }
-
-
-        }
-        */
     public void calcspeed(){
 
         float xMultiplier = -1.0f;
@@ -338,80 +258,80 @@ public class JoystickClassPanTilt {
 
 
 
-        //Log.d("x,y", "" + leftEngineSpeed + " " + rightEngineSpeed);
-
 
     }
     public int getStepmotor_direction(){
 
-        if (get4Direction()==STICK_LEFT) {
+        if ((get4Direction()==STICK_LEFT) && ((get4Direction()!=STICK_UP) || (get4Direction()!=STICK_DOWN ))) {
             stepmotor_direction = 0;
+            Log.d("stepmotordirection 0", "" );
             return stepmotor_direction;
+        }
+
+        else if ((get4Direction()==STICK_LEFT) && ((get4Direction()==STICK_UP) || (get4Direction()==STICK_DOWN ))) {
+                stepmotor_direction = 3;
+            Log.d("stepmotordirection 0", "" );
+                return stepmotor_direction;
 
 
-        }else if (get4Direction()==STICK_RIGHT) {
+        }else if ((get4Direction()==STICK_RIGHT) && ((get4Direction()!=STICK_UP) || (get4Direction()!=STICK_DOWN ))) {
             stepmotor_direction = 1;
+            Log.d("stepmotordirection 1", "" );
             return stepmotor_direction;
 
         }
+        else if ((get4Direction()==STICK_RIGHT) && ((get4Direction()==STICK_UP) || (get4Direction()==STICK_DOWN ))) {
+            stepmotor_direction = 3;
+            Log.d("stepmotordirection 1", "" );
 
-    return 2;
-    }
-/*
-    public float getspeedX(){
+            return stepmotor_direction;
 
-
-        if (leftEngineSpeed > max_distance) {
-            leftEngineSpeed = max_distance;
-
-        }else if (leftEngineSpeed < neg_distance) {
-            leftEngineSpeed = neg_distance;
-
-        }
-        else if (get4Direction()==STICK_UP) {
-            return leftEngineSpeed;
-
-        } else if (get4Direction()==STICK_DOWN) {
-            return leftEngineSpeed;
-
-        } else if (get4Direction()==STICK_LEFT) {
-            return -1*rightEngineSpeed;
-
-
-        }else if (get4Direction()==STICK_RIGHT) {
-            return leftEngineSpeed;
 
         }
 
+        else if ((get4Direction()==STICK_UP) && ((get4Direction()!=STICK_RIGHT) || (get4Direction()!=STICK_LEFT ))) {
+            stepmotor_direction = 2;
+            return stepmotor_direction;
 
-        return leftEngineSpeed;
+        }
+        else if ((get4Direction()==STICK_DOWN) && ((get4Direction()!=STICK_RIGHT) || (get4Direction()!=STICK_LEFT ))) {
+            stepmotor_direction = 2;
+            return stepmotor_direction;
+        }
+        else if ((get4Direction()==STICK_DOWN) && ((get4Direction()==STICK_RIGHT) || (get4Direction()==STICK_LEFT ))) {
+            stepmotor_direction = 3;
+            return stepmotor_direction;
+
+        }
+        else if ((get4Direction()==STICK_UP) && ((get4Direction()==STICK_RIGHT) || (get4Direction()==STICK_LEFT))) {
+            stepmotor_direction = 3;
+            return stepmotor_direction;
+        }
+
+        return 7;
     }
 
-
-    public float getspeedY(){
-
-
-        if(rightEngineSpeed > max_distance){
-            rightEngineSpeed = max_distance;
-
-        }else if (rightEngineSpeed < neg_distance) {
-            rightEngineSpeed = neg_distance;
-        }
-        else if (get4Direction()==STICK_UP) {
-            return leftEngineSpeed;
-
-        } else if (get4Direction()==STICK_DOWN) {
-            return leftEngineSpeed;
-
-        } else if (get4Direction()==STICK_LEFT) {
-            return rightEngineSpeed;
+public float getServoSpeed(){
 
 
-        }else if (get4Direction()==STICK_RIGHT) {
-            return -1*leftEngineSpeed;
 
-        }
+     if (get4Direction()==STICK_UP) {
+         servoSpeed = distance*15;
+        servoSpeed = max_speed - (servoSpeed+750);
+         getDistance();
+        return servoSpeed;
 
-        return rightEngineSpeed;
-    }*/
+    } else if (get4Direction()==STICK_DOWN) {
+         servoSpeed = distance*15;
+         servoSpeed = min_speed + (servoSpeed+750);
+         getDistance();
+        return servoSpeed;
+
+    }
+
+
+    return 0;
+}
+
+
 }
